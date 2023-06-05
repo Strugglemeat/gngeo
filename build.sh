@@ -1,3 +1,4 @@
+mkdir /tmp/miyoosd
 cd /home/bankbank/miyoo/qemu
 ./mount.sh
 cd /home/bankbank/miyoo/gngeo
