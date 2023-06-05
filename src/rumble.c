@@ -9,9 +9,12 @@ void rumble_checkMemory()
     uint16_t p2move = mem68k_fetch_ram_word(0x108302); //actually a long, might cause false positive by only watching from 108302 instead of 108300
     uint8_t triggerByte = mem68k_fetch_ram_byte(0x108175);
 
-//PER-CHARACTER
+	uint8_t superFlash = mem68k_fetch_ram_byte(0x10A787);
+
+//PER-CHARACTER - hitting
 	if(mem68k_fetch_ram_byte(0x10843b)!=0)//p2 damage accumulator
 	{
+	//DAIMON
 		//近敌时→↘↓↙←→↘↓↙←＋ＡorＣ
 		if(p1move==0x4F6A && (triggerByte==0x7E || triggerByte==0x8A || triggerByte==0x12 || triggerByte==0x18 || triggerByte==0x72))rumble_do(onLeftSide,100);
 		if(p1move==0x4F6A && (triggerByte==0x48 || triggerByte==0x54 || triggerByte==0x3C))rumble_do(onLeftSide,100);
@@ -34,16 +37,45 @@ void rumble_checkMemory()
 		if(p2move==0x4E1C)rumble_do(onLeftSide,40);
 	}
 
-//GLOBAL
-	//A+B+C explosion (ADVANCED mode)
-	//note that this is UNRELATED to player 2 taking damage
-	//if(mem68k_fetch_ram_byte(0x1081EA)>=0x3e)
-	if(p1move==0x11a2)
+//PER-CHARACTER - super flash
+
+/*
+	//DAIMON
+	if(p1move==0x52c0 || p1move==0x4f6a) //can't use 4f6a cus it triggers on multiple hits?
 	{
 		rumble_do(0,100);
 		rumble_do(1,100);
-		//mem68k_store_ram_byte(0x10A83A, 0x99);//testing
 	}
+
+	//LEONA
+	if(p1move==0x04d4)
+	{
+		rumble_do(0,100);
+		rumble_do(1,100);
+	}
+*/
+
+
+//GLOBAL
+	//A+B+C explosion (ADVANCED mode)
+	//note that this is UNRELATED to player 2 taking damage
+	uint16_t player1ABCexplosion = mem68k_fetch_ram_word(0x1081EA);
+	if(player1ABCexplosion>=0x3f00 && player1ABCexplosion<0x5000)
+	//if(p1move==0x11a2)
+	{
+		//rumble_do(0,100);
+		//rumble_do(1,100);
+		mem68k_store_ram_byte(0x10A83A, 0x99);//testing
+	}
+
+	//if(superFlash==0x04)
+	if(superFlash>0x00)
+	{
+		//rumble_do(0,100);
+		//rumble_do(1,100);
+		mem68k_store_ram_byte(0x10A83A, 0x99);//testing		
+	}
+
 
 }
 
