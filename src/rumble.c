@@ -61,13 +61,13 @@ void rumble_checkMemory()
 		{
 			switch(p1move)
 			{
-				case 0xfab2://QCB + P ( x3 ) 1 and 2 of 3
+				case 0xFAB2://QCB + P ( x3 ) 1 and 2 of 3
 					if(p2move==0x8a3a)rumble_do(onLeftSide,40);
 					break;
-				case 0xfa5a://QCB + P ( x3 ) 3 of 3
+				case 0xFA5A://QCB + P ( x3 ) 3 of 3
 					if(triggerByte==0x24)rumble_do(onLeftSide,50);
 					break;
-				case 0xf344://DP + P
+				case 0xF344://DP + P
 					rumble_do(onLeftSide,60);
 					break;
 				case 0xF5BE://HCB + K
@@ -92,14 +92,12 @@ void rumble_checkMemory()
 	{
 		rumble_do(0,100);
 		rumble_do(1,100);
-		//mem68k_store_ram_byte(0x10A83A, 0x99);//testing
 	}
 
 	if(superFlash>0x00)
 	{
 		rumble_do(0,100);
-		rumble_do(1,100);
-		//mem68k_store_ram_byte(0x10A83A, 0x99);//testing		
+		rumble_do(1,100);		
 	}
 
 
@@ -107,15 +105,6 @@ void rumble_checkMemory()
 
 void rumble_do(uint8_t bool_onLeftSide, uint8_t intensity)
 {
-	/*
-	//using HP bars
-	uint8_t sendAmount = 0x67*intensity/100;
-
-	if(bool_onLeftSide==1)mem68k_store_ram_byte(0x108239, sendAmount);//P1 on left side	
-	else if(bool_onLeftSide==0)mem68k_store_ram_byte(0x108439, sendAmount);//P1 on right side
-	*/
-
-	//int currentTime=mem68k_fetch_ram_byte(0x110A83A);
 	if(bool_onLeftSide==1)mem68k_store_ram_byte(0x10A83A, 0x88);
 	else if(bool_onLeftSide==0)mem68k_store_ram_byte(0x10A83A, 0x11);
 }
@@ -133,7 +122,6 @@ void rumble_kof97_training()
     if(mem68k_fetch_ram_byte(0x108100)==0x00)
     {
     	mem68k_store_ram_byte(0x1082E3, 0x03);//p1 infinite meter 1 of 3
-    	//mem68k_store_ram_byte(0x1081EA, 0x40);//p1 infinite meter 2 of 3
     	mem68k_store_ram_byte(0x10825F, 0x23);//p1 infinite meter 3 of 3
 
     	mem68k_store_ram_byte(0x10EC34, 0x1F);//hidden characters
@@ -143,31 +131,4 @@ void rumble_kof97_training()
 
       	if(mem68k_fetch_ram_byte(0x110A83A)<=0x01)mem68k_store_ram_byte(0x10A83A, 0x99);//infinite time
     }
-}
-
-void rumble_temporary_visualization()//this is now unused, because of the conflict between using the HP bars and the no damage debug code.
-{
-#define p1addressHP 0x108239
-#define p2addressHP 0x108439
-
-#define reductionSpeed 0x4
-
-	if(mem68k_fetch_ram_byte(0x100000)==0x20)
-    {
-		uint8_t p1HP=mem68k_fetch_ram_byte(p1addressHP);
-		uint8_t p2HP=mem68k_fetch_ram_byte(p2addressHP);
-
-		if(p1HP>reductionSpeed+1)p1HP-=reductionSpeed;
-
-		if(p2HP>reductionSpeed+1)p2HP-=reductionSpeed;
-			
-		if(p1HP>reductionSpeed)mem68k_store_ram_byte(p1addressHP, p1HP);
-
-		else mem68k_store_ram_byte(p1addressHP, 0x01);
-	
-		if(p2HP>reductionSpeed)mem68k_store_ram_byte(p2addressHP, p2HP);
-		
-		else mem68k_store_ram_byte(p2addressHP, 0x01);
-		
-	}
 }
