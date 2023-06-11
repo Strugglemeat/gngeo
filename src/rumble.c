@@ -90,15 +90,15 @@ void rumble_checkMemory()
 	//A+B+C explosion (ADVANCED mode)
 	if(player1ABCexplosion>=0x3f00 && player1ABCexplosion<0x5000)
 	{
-		//rumble_do(0,100);
-		//rumble_do(1,100);
+		rumble_do(0,100);
+		rumble_do(1,100);
 		//mem68k_store_ram_byte(0x10A83A, 0x99);//testing
 	}
 
 	if(superFlash>0x00)
 	{
-		//rumble_do(0,100);
-		//rumble_do(1,100);
+		rumble_do(0,100);
+		rumble_do(1,100);
 		//mem68k_store_ram_byte(0x10A83A, 0x99);//testing		
 	}
 
